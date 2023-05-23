@@ -1,0 +1,9 @@
+main: fr.studioevident.tppos.TpPos
+name: TpPos
+version: 1.0
+api-version: 1.19
+author: StudioEvident
+commands:
+  tppos:
+    description: "Allow non-op player to tp when in creative mode."
+    usage: /tppos [x] [y] [z]
