@@ -1,9 +1,10 @@
-main: fr.studioevident.tppos.TpPos
-name: TpPos
+main: fr.studioevident.tpplot.TpPlot
+name: TpPlot
 version: 1.0
 api-version: 1.19
 author: StudioEvident
+depend: [ WorldGuard ]
 commands:
-  tppos:
-    description: "Allow non-op player to tp when in creative mode."
-    usage: /tppos [x] [y] [z]
+  tpplot:
+    description: "Allow players to tp to WorldGuard plots."
+    usage: /tpplot [player] [plotName]
