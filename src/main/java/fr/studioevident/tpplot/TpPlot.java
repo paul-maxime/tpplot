@@ -65,8 +65,8 @@ public final class TpPlot extends JavaPlugin {
         return regions;
     }
 
-    public List<Player> getPlayersWithPlot(World world) {
-        List<Player> players = new ArrayList<>();
+    public List<OfflinePlayer> getPlayersWithPlot(World world) {
+        List<OfflinePlayer> players = new ArrayList<>();
         Map<String, ProtectedRegion> regions = getRegionsOfWorld(world);
 
         List<UUID> uuids = new ArrayList<>();
@@ -78,7 +78,7 @@ public final class TpPlot extends JavaPlugin {
         }
 
         for (UUID uuid : uuids) {
-            players.add(Bukkit.getPlayer(uuid));
+            players.add(Bukkit.getOfflinePlayer(uuid));
         }
 
         return players;

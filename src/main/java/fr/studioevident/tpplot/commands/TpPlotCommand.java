@@ -78,7 +78,7 @@ public class TpPlotCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 1) {
             List<String> names = new ArrayList<>();
-            for (Player p : plugin.getPlayersWithPlot(player.getWorld())) {
+            for (OfflinePlayer p : plugin.getPlayersWithPlot(player.getWorld())) {
                 names.add(p.getName());
             }
 
