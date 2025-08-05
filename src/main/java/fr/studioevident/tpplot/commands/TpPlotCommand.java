@@ -1,13 +1,10 @@
 package fr.studioevident.tpplot.commands;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import fr.studioevident.tpplot.TpPlot;
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +37,7 @@ public class TpPlotCommand implements CommandExecutor, TabCompleter {
         }
 
         Map<String, ProtectedRegion> allRegions = plugin.getRegionsOfWorld(world);
-        List<String> regions = plugin.getPlotsNamesOfPlayer(world, Bukkit.getOfflinePlayerIfCached(args[0]));
+        List<String> regions = plugin.getPlotsNamesOfPlayer(world, args[0]);
 
         ProtectedRegion plot;
         if (args.length == 2)
@@ -78,15 +75,22 @@ public class TpPlotCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 1) {
             List<String> names = new ArrayList<>();
-            for (OfflinePlayer p : plugin.getPlayersWithPlot(player.getWorld())) {
-                names.add(p.getName());
+            for (String name : plugin.getPlayersWithPlot(player.getWorld())) {
+                if (name.toLowerCase().startsWith(args[0].toLowerCase())) {
+                    names.add(name);
+                }
             }
-
             return names;
         }
 
         if (args.length == 2) {
-            return plugin.getPlotsNamesOfPlayer(player.getWorld(), Bukkit.getOfflinePlayerIfCached(args[0]));
+            List<String> plots = new ArrayList<>();
+            for (String plot : plugin.getPlotsNamesOfPlayer(player.getWorld(), args[0])) {
+                if (plot.toLowerCase().startsWith(args[1].toLowerCase())) {
+                    plots.add(plot);
+                }
+            }
+            return plots;
         }
 
         return new ArrayList<>();

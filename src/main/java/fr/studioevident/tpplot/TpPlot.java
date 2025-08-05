@@ -21,6 +21,8 @@ public final class TpPlot extends JavaPlugin {
     private WorldGuard worldGuard;
     private boolean canTpInAnything = getConfig().getBoolean("player-can-tp-in-anything");
 
+    private final HashMap<String, UUID> namesToIdsCache = new HashMap<>();
+
     @Override
     public void onEnable() {
         worldGuard = WorldGuard.getInstance();
@@ -65,8 +67,8 @@ public final class TpPlot extends JavaPlugin {
         return regions;
     }
 
-    public List<OfflinePlayer> getPlayersWithPlot(World world) {
-        List<OfflinePlayer> players = new ArrayList<>();
+    public List<String> getPlayersWithPlot(World world) {
+        List<String> playerNames = new ArrayList<>();
         Map<String, ProtectedRegion> regions = getRegionsOfWorld(world);
 
         List<UUID> uuids = new ArrayList<>();
@@ -78,23 +80,29 @@ public final class TpPlot extends JavaPlugin {
         }
 
         for (UUID uuid : uuids) {
-            players.add(Bukkit.getOfflinePlayer(uuid));
+            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            namesToIdsCache.put(player.getName(), player.getUniqueId());
+            playerNames.add(player.getName());
         }
 
-        return players;
+        return playerNames;
     }
 
-    public List<String> getPlotsNamesOfPlayer(World world, OfflinePlayer player) {
-        if (player == null) {
-            return new ArrayList<>();
+    public List<String> getPlotsNamesOfPlayer(World world, String playerName) {
+        if (playerName == null || playerName.isEmpty()) {
+            return List.of();
         }
+        if (!namesToIdsCache.containsKey(playerName)) {
+            return List.of();
+        }
+        UUID playerId = namesToIdsCache.get(playerName);
 
         Map<String, ProtectedRegion> regions = getRegionsOfWorld(world);
 
         List<String> regionsNames = new ArrayList<>();
         for (String regionName : regions.keySet()) {
             ProtectedRegion region = regions.get(regionName);
-            if (region.getOwners().contains(player.getUniqueId())) regionsNames.add(regionName);
+            if (region.getOwners().contains(playerId)) regionsNames.add(regionName);
         }
 
         return regionsNames;
