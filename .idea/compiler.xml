@@ -12,7 +12,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Atf-TpPos" target="1.8" />
-      <module name="tpplot" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>
