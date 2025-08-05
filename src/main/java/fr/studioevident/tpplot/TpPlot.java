@@ -19,6 +19,7 @@ public final class TpPlot extends JavaPlugin {
     private boolean canTpInAnything = getConfig().getBoolean("player-can-tp-in-anything");
 
     private final HashMap<String, UUID> namesToIdsCache = new HashMap<>();
+    private final HashMap<UUID, String> idsToNamesCache = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -77,9 +78,19 @@ public final class TpPlot extends JavaPlugin {
         }
 
         for (UUID uuid : uuids) {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            namesToIdsCache.put(player.getName(), player.getUniqueId());
-            playerNames.add(player.getName());
+            Player onlinePlayer = Bukkit.getPlayer(uuid);
+            if (onlinePlayer != null) {
+                idsToNamesCache.put(onlinePlayer.getUniqueId(), onlinePlayer.getName());
+                namesToIdsCache.put(onlinePlayer.getName(), onlinePlayer.getUniqueId());
+                playerNames.add(onlinePlayer.getName());
+            } else if (idsToNamesCache.containsKey(uuid)) {
+                playerNames.add(idsToNamesCache.get(uuid));
+            } else {
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+                idsToNamesCache.put(offlinePlayer.getUniqueId(), offlinePlayer.getName());
+                namesToIdsCache.put(offlinePlayer.getName(), offlinePlayer.getUniqueId());
+                playerNames.add(offlinePlayer.getName());
+            }
         }
 
         return playerNames;
